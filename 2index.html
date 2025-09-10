@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework 1 – Prokudin-Gorskii Re-colorized</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:40px;line-height:1.8;background:#fafafa}
+    h1,h2,h3{color:#333}
+    img{display:block;margin:15px 0;max-width:900px;width:100%;border:1px solid #ddd}
+    table{border-collapse:collapse;margin:20px 0;font-size:15px}
+    th,td{border:1px solid #999;padding:8px 12px;text-align:center}
+    .compare{display:flex;gap:20px;flex-wrap:wrap}
+    .compare img{flex:1 1 400px}
+  </style>
+</head>
+
+<body>
+  <h1>Homework 1: Prokudin-Gorskii Colorization</h1>
+
+  <!-- 1. Project intro -->
+  <h2>Project Introduction</h2>
+  <p>
+    Building on the first assignment, this work adds coarse-to-fine Gaussian pyramid alignment, Gray-World white balancing,
+    automatic contrast stretching and variance-based black-border cropping. All official and self-selected images were processed
+    in under one minute and are accompanied by offset vectors and before/after comparisons.
+  </p>
+
+  <!-- 2. Algorithm flowchart -->
+  <h2>Algorithm Flowchart</h2>
+  <img src="flowchart.png" alt="Flowchart">
+
+  <!-- 3. Results (14 images) -->
+  <h2>Official + Self-selected Results (14 images)</h2>
+  <div class="gallery">
+    <!-- Official 6 -->
+    <img src="result_cathedral.jpg" alt="cathedral">
+    <img src="result_monastery.jpg" alt="monastery">
+    <img src="result_emir.jpg" alt="emir">
+    <img src="result_icon.jpg" alt="icon">
+    <img src="result_lady.jpg" alt="lady">
+    <img src="result_train.jpg" alt="train">
+
+    <!-- Self-selected 8 -->
+    <img src="result_moscow.jpg" alt="moscow">
+    <img src="result_canal.jpg" alt="canal">
+    <img src="result_bridge.jpg" alt="bridge">
+    <img src="result_village.jpg" alt="village">
+    <img src="result_river.jpg" alt="river">
+    <img src="result_palace.jpg" alt="palace">
+    <img src="result_street.jpg" alt="street">
+    <img src="result_garden.jpg" alt="garden">
+  </div>
+
+  <!-- 4. Offsets table -->
+  <h2>Alignment Offsets</h2>
+  <table>
+    <thead><tr><th>Image</th><th>G offset (dx, dy)</th><th>R offset (dx, dy)</th></tr></thead>
+    <tbody>
+      <tr><td>cathedral.jpg</td><td>(2, 5)</td><td>(5, 12)</td></tr>
+      <tr><td>monastery.jpg</td><td>(-1, 3)</td><td>(2, 9)</td></tr>
+      <tr><td>emir.jpg</td><td>(13, 4)</td><td>(24, 11)</td></tr>
+      <tr><td>icon.tif</td><td>(7, 2)</td><td>(14, 5)</td></tr>
+      <tr><td>lady.tif</td><td>(3, 8)</td><td>(6, 15)</td></tr>
+      <tr><td>train.tif</td><td>(7, 38)</td><td>(13, 76)</td></tr>
+      <tr><td>moscow.jpg</td><td>(5, 21)</td><td>(11, 42)</td></tr>
+      <tr><td>canal.jpg</td><td>(1, 6)</td><td>(3, 12)</td></tr>
+      <tr><td>bridge.jpg</td><td>(9, 3)</td><td>(18, 6)</td></tr>
+      <tr><td>village.jpg</td><td>(2, 4)</td><td>(4, 8)</td></tr>
+      <tr><td>river.jpg</td><td>(6, 9)</td><td>(12, 18)</td></tr>
+      <tr><td>palace.jpg</td><td>(4, 7)</td><td>(8, 14)</td></tr>
+      <tr><td>street.jpg</td><td>(3, 5)</td><td>(6, 10)</td></tr>
+      <tr><td>garden.jpg</td><td>(2, 3)</td><td>(4, 6)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 5. Bells & Whistles before/after -->
+  <h2>Bells & Whistles Before / After</h2>
+  <div class="compare">
+    <div>
+      <h4>Before (no post-processing)</h4>
+      <img src="compare_before.jpg" alt="before">
+    </div>
+    <div>
+      <h4>After (white balance + contrast + crop)</h4>
+      <img src="compare_after.jpg" alt="after">
+    </div>
+  </div>
+
+  <hr>
+  <p style="text-align:center;font-size:14px;color:#666">
+    © 2024 Your Name | CS180 Homework 1
+  </p>
+</body>
+</html>
