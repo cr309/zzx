@@ -2,32 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>10 Figures</title>
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;margin:40px;background:#fafafa}
-    h1{text-align:center;color:#333}
-    .grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(400px,1fr))}
-    img{width:100%;border:1px solid #ddd}
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 20px;
+      background: #fafafa;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .grid {
+      display: grid;
+      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+      justify-items: center;
+    }
+    .image-container {
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    img:hover {
+      transform: scale(1.02);
+    }
+    .caption {
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      background: white;
+    }
+    hr {
+      margin: 40px 0 20px 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      body {
+        margin: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .grid {
+        gap: 15px;
+      }
+      body {
+        margin: 10px;
+      }
+    }
   </style>
 </head>
 
 <body>
   <h1>Fun with Filters and Frequencies!</h1>
   <div class="grid">
-    <img src="Figure_1.png" alt="Figure 1">
-    <img src="Figure_2.png" alt="Figure 2">
-    <img src="Figure_3.png" alt="Figure 3">
-    <img src="Figure_4.png" alt="Figure 4">
-    <img src="Figure_5.png" alt="Figure 5">
-    <img src="Figure_6.png" alt="Figure 6">
-    <img src="Figure_7.png" alt="Figure 7">
-    <img src="Figure_8.png" alt="Figure 8">
-    <img src="Figure_9.png" alt="Figure 9">
-    <img src="Figure_10.png" alt="Figure 10">
+    <div class="image-container">
+      <img src="Figure_1.png" alt="Figure 1">
+      <div class="caption">Figure 1</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_2.png" alt="Figure 2">
+      <div class="caption">Figure 2</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_3.png" alt="Figure 3">
+      <div class="caption">Figure 3</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_4.png" alt="Figure 4">
+      <div class="caption">Figure 4</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_5.png" alt="Figure 5">
+      <div class="caption">Figure 5</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_6.png" alt="Figure 6">
+      <div class="caption">Figure 6</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_7.png" alt="Figure 7">
+      <div class="caption">Figure 7</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_8.png" alt="Figure 8">
+      <div class="caption">Figure 8</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_9.png" alt="Figure 9">
+      <div class="caption">Figure 9</div>
+    </div>
+    <div class="image-container">
+      <img src="Figure_10.png" alt="Figure 10">
+      <div class="caption">Figure 10</div>
+    </div>
   </div>
-   <hr>
-  <p style="text-align:center;font-size:14px;color:#666">
-    © 2025 Zhaoxi Zhang | CS180 Homework 1
-  </p>
+  
+  <hr>
+  <p>© 2025 Zhaoxi Zhang | CS180 Homework 1</p>
 </body>
 </html>
