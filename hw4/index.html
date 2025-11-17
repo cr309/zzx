@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neural Radiance Field</title>
     <style>
+        /* Reset and base styles */
         * {
             margin: 0;
             padding: 0;
@@ -12,7 +13,7 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -28,6 +29,7 @@
             overflow: hidden;
         }
         
+        /* Header styles */
         header {
             background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: white;
@@ -50,6 +52,7 @@
             opacity: 0.9;
         }
         
+        /* Content sections */
         .content {
             padding: 30px;
         }
@@ -66,6 +69,7 @@
             border-bottom: 2px solid #fdbb2d;
         }
         
+        /* Image grid layout */
         .image-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -78,6 +82,7 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         
         .image-card:hover {
@@ -99,6 +104,11 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .image-card:hover .image-container img {
+            transform: scale(1.05);
         }
         
         .image-info {
@@ -117,6 +127,7 @@
             font-size: 0.9rem;
         }
         
+        /* GIF indicator */
         .gif-container {
             position: relative;
         }
@@ -133,6 +144,68 @@
             font-weight: bold;
         }
         
+        /* Modal styles for enlarged images */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+        
+        .modal-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #fdbb2d;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Footer */
         footer {
             background-color: #1a2a6c;
             color: white;
@@ -141,6 +214,13 @@
             margin-top: 30px;
         }
         
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .image-grid {
                 grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -153,6 +233,10 @@
             .section-title {
                 font-size: 1.6rem;
             }
+            
+            .modal-content {
+                max-width: 95%;
+            }
         }
     </style>
 </head>
@@ -160,220 +244,220 @@
     <div class="container">
         <header>
             <h1>Neural Radiance Field</h1>
-            <p>使用神经网络表示和渲染复杂3D场景的前沿技术</p>
+            <p>Advanced neural representation and rendering of complex 3D scenes</p>
         </header>
         
         <div class="content">
             <section class="section">
-                <h2 class="section-title">基础概念与原理</h2>
+                <h2 class="section-title">Fundamental Concepts and Principles</h2>
                 <div class="image-grid">
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p01.png', 'NeRF Basic Principles')">
                         <div class="image-container">
-                            <img src="p01.png" alt="NeRF基础原理">
+                            <img src="p01.png" alt="NeRF Basic Principles">
                         </div>
                         <div class="image-info">
-                            <h3>NeRF基础原理</h3>
-                            <p>展示Neural Radiance Field的基本工作原理</p>
+                            <h3>NeRF Basic Principles</h3>
+                            <p>Illustration of Neural Radiance Field fundamental concepts</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p02.png', 'Volume Rendering Equation')">
                         <div class="image-container">
-                            <img src="p02.png" alt="体积渲染方程">
+                            <img src="p02.png" alt="Volume Rendering Equation">
                         </div>
                         <div class="image-info">
-                            <h3>体积渲染方程</h3>
-                            <p>离散体积渲染方程的数学表示</p>
+                            <h3>Volume Rendering Equation</h3>
+                            <p>Mathematical representation of discrete volume rendering</p>
                         </div>
                     </div>
                 </div>
             </section>
             
             <section class="section">
-                <h2 class="section-title">训练过程与优化</h2>
+                <h2 class="section-title">Training Process and Optimization</h2>
                 <div class="image-grid">
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p11.gif', 'Training Process 1')">
                         <div class="image-container gif-container">
-                            <img src="p11.gif" alt="训练过程1">
+                            <img src="p11.gif" alt="Training Process 1">
                             <div class="gif-badge">GIF</div>
                         </div>
                         <div class="image-info">
-                            <h3>训练过程1</h3>
-                            <p>NeRF模型训练过程中的场景重建</p>
+                            <h3>Training Process 1</h3>
+                            <p>Scene reconstruction during NeRF model training</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p12.gif', 'Training Process 2')">
                         <div class="image-container gif-container">
-                            <img src="p12.gif" alt="训练过程2">
+                            <img src="p12.gif" alt="Training Process 2">
                             <div class="gif-badge">GIF</div>
                         </div>
                         <div class="image-info">
-                            <h3>训练过程2</h3>
-                            <p>不同视角下的场景重建过程</p>
+                            <h3>Training Process 2</h3>
+                            <p>Scene reconstruction from different viewpoints</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p13.gif', 'Training Process 3')">
                         <div class="image-container gif-container">
-                            <img src="p13.gif" alt="训练过程3">
+                            <img src="p13.gif" alt="Training Process 3">
                             <div class="gif-badge">GIF</div>
                         </div>
                         <div class="image-info">
-                            <h3>训练过程3</h3>
-                            <p>训练过程中细节逐渐清晰</p>
+                            <h3>Training Process 3</h3>
+                            <p>Gradual refinement of details during training</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p14.gif', 'Training Process 4')">
                         <div class="image-container gif-container">
-                            <img src="p14.gif" alt="训练过程4">
+                            <img src="p14.gif" alt="Training Process 4">
                             <div class="gif-badge">GIF</div>
                         </div>
                         <div class="image-info">
-                            <h3>训练过程4</h3>
-                            <p>从模糊到清晰的训练演变</p>
+                            <h3>Training Process 4</h3>
+                            <p>Evolution from blurry to clear during training</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
-                        <div class="image-container gif-container">
-                            <img src="p15.png" alt="训练过程5">
-                        </div>
-                        <div class="image-info">
-                            <h3>训练过程5</h3>
-                            <p>训练过程中的关键步骤</p>
-                        </div>
-                    </div>
-                    
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p15.png', 'Training Process 5')">
                         <div class="image-container">
-                            <img src="p16.png" alt="训练过程6">
+                            <img src="p15.png" alt="Training Process 5">
                         </div>
                         <div class="image-info">
-                            <h3>训练过程6</h3>
-                            <p>训练过程中的性能指标</p>
+                            <h3>Training Process 5</h3>
+                            <p>Key steps in the training process</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p16.png', 'Training Process 6')">
                         <div class="image-container">
-                            <img src="p17.png" alt="训练过程7">
+                            <img src="p16.png" alt="Training Process 6">
                         </div>
                         <div class="image-info">
-                            <h3>训练过程7</h3>
-                            <p>训练完成后的结果对比</p>
+                            <h3>Training Process 6</h3>
+                            <p>Performance metrics during training</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card" onclick="openModal('p17.png', 'Training Process 7')">
+                        <div class="image-container">
+                            <img src="p17.png" alt="Training Process 7">
+                        </div>
+                        <div class="image-info">
+                            <h3>Training Process 7</h3>
+                            <p>Comparison of results after training completion</p>
                         </div>
                     </div>
                 </div>
             </section>
             
             <section class="section">
-                <h2 class="section-title">射线与采样可视化</h2>
+                <h2 class="section-title">Ray and Sampling Visualization</h2>
                 <div class="image-grid">
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p21.png', 'Ray Visualization')">
                         <div class="image-container">
-                            <img src="p21.png" alt="射线可视化">
+                            <img src="p21.png" alt="Ray Visualization">
                         </div>
                         <div class="image-info">
-                            <h3>射线可视化</h3>
-                            <p>展示相机射线在3D空间中的分布</p>
+                            <h3>Ray Visualization</h3>
+                            <p>Distribution of camera rays in 3D space</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p22.png', 'Sampling Point Distribution')">
                         <div class="image-container">
-                            <img src="p22.png" alt="采样点分布">
+                            <img src="p22.png" alt="Sampling Point Distribution">
                         </div>
                         <div class="image-info">
-                            <h3>采样点分布</h3>
-                            <p>沿射线采样点的空间分布</p>
+                            <h3>Sampling Point Distribution</h3>
+                            <p>Spatial distribution of sampling points along rays</p>
                         </div>
                     </div>
                 </div>
             </section>
             
             <section class="section">
-                <h2 class="section-title">实验结果与分析</h2>
+                <h2 class="section-title">Experimental Results and Analysis</h2>
                 <div class="image-grid">
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p31.png', 'Experimental Result 1')">
                         <div class="image-container">
-                            <img src="p31.png" alt="实验结果1">
+                            <img src="p31.png" alt="Experimental Result 1">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果1</h3>
-                            <p>不同参数配置下的渲染质量对比</p>
+                            <h3>Experimental Result 1</h3>
+                            <p>Rendering quality comparison with different parameter configurations</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p33.png', 'Experimental Result 2')">
                         <div class="image-container">
-                            <img src="p33.png" alt="实验结果2">
+                            <img src="p33.png" alt="Experimental Result 2">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果2</h3>
-                            <p>PSNR指标随训练迭代的变化</p>
+                            <h3>Experimental Result 2</h3>
+                            <p>PSNR metrics across training iterations</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p34.png', 'Experimental Result 3')">
                         <div class="image-container">
-                            <img src="p34.png" alt="实验结果3">
+                            <img src="p34.png" alt="Experimental Result 3">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果3</h3>
-                            <p>不同网络结构的性能比较</p>
+                            <h3>Experimental Result 3</h3>
+                            <p>Performance comparison of different network architectures</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p35.png', 'Experimental Result 4')">
                         <div class="image-container">
-                            <img src="p35.png" alt="实验结果4">
+                            <img src="p35.png" alt="Experimental Result 4">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果4</h3>
-                            <p>训练与验证损失曲线</p>
+                            <h3>Experimental Result 4</h3>
+                            <p>Training and validation loss curves</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p36.png', 'Experimental Result 5')">
                         <div class="image-container">
-                            <img src="p36.png" alt="实验结果5">
+                            <img src="p36.png" alt="Experimental Result 5">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果5</h3>
-                            <p>不同视角下的渲染结果</p>
+                            <h3>Experimental Result 5</h3>
+                            <p>Rendering results from different viewpoints</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p38.png', 'Experimental Result 6')">
                         <div class="image-container">
-                            <img src="p38.png" alt="实验结果6">
+                            <img src="p38.png" alt="Experimental Result 6">
                         </div>
                         <div class="image-info">
-                            <h3>实验结果6</h3>
-                            <p>最终渲染质量评估</p>
+                            <h3>Experimental Result 6</h3>
+                            <p>Final rendering quality assessment</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p39.gif', 'Spherical Rendering')">
                         <div class="image-container gif-container">
-                            <img src="p39.gif" alt="球形渲染">
+                            <img src="p39.gif" alt="Spherical Rendering">
                             <div class="gif-badge">GIF</div>
                         </div>
                         <div class="image-info">
-                            <h3>球形渲染</h3>
-                            <p>360度球形渲染结果展示</p>
+                            <h3>Spherical Rendering</h3>
+                            <p>360-degree spherical rendering result</p>
                         </div>
                     </div>
                     
-                    <div class="image-card">
+                    <div class="image-card" onclick="openModal('p40.png', 'Final Result')">
                         <div class="image-container">
-                            <img src="p40.png" alt="最终结果">
+                            <img src="p40.png" alt="Final Result">
                         </div>
                         <div class="image-info">
-                            <h3>最终结果</h3>
-                            <p>训练完成后的高质量渲染</p>
+                            <h3>Final Result</h3>
+                            <p>High-quality rendering after training completion</p>
                         </div>
                     </div>
                 </div>
@@ -381,16 +465,61 @@
         </div>
         
         <footer>
-            <p>Neural Radiance Field 项目展示 &copy; 2023</p>
+            <p>Neural Radiance Field Project Showcase &copy; 2023</p>
         </footer>
     </div>
 
+    <!-- Modal for enlarged images -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption" class="modal-caption"></div>
+    </div>
+
     <script>
-        // 确保所有GIF都能循环播放
+        // Function to open modal with enlarged image
+        function openModal(imageSrc, captionText) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const caption = document.getElementById('modalCaption');
+            
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+            caption.innerHTML = captionText;
+            
+            // Ensure GIFs continue to play when enlarged
+            if (imageSrc.endsWith('.gif')) {
+                const timestamp = new Date().getTime();
+                modalImg.src = imageSrc.split('?')[0] + '?' + timestamp;
+                modalImg.setAttribute('loop', '');
+            }
+        }
+        
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modal = document.getElementById('imageModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Ensure all GIFs loop properly on page load
         document.addEventListener('DOMContentLoaded', function() {
             const gifs = document.querySelectorAll('img[src$=".gif"]');
             gifs.forEach(gif => {
-                // 移除可能存在的缓存参数，确保GIF重新加载
+                // Remove any cache parameters to ensure GIF reloads
                 const src = gif.src;
                 if (src.indexOf('?') > -1) {
                     gif.src = src.split('?')[0] + '?' + new Date().getTime();
@@ -398,7 +527,7 @@
                     gif.src = src + '?' + new Date().getTime();
                 }
                 
-                // 设置循环播放
+                // Set loop attribute
                 gif.setAttribute('loop', '');
             });
         });
