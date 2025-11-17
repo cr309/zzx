@@ -1,175 +1,407 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neural Radiance Field!</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #eef2f3, #dfe9f3);
-      padding: 30px;
-    }
-    header { text-align: center; margin-bottom: 50px; }
-    h1 {
-      font-size: 3rem;
-      color: #2c3e50;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-    }
-    .subtitle { font-size: 1.1rem; color: #6c7a89; margin-top: 10px; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 35px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: white;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-      cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-    }
-
-    .img-box {
-      width: 100%;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-    }
-    .img-box img {
-      width: auto;
-      height: auto;
-      max-width: 100%;
-      max-height: 600px;
-      object-fit: contain;
-      display: block;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.92);
-      z-index: 1000;
-    }
-
-    .modal img {
-      display: block;
-      max-width: 90%; max-height: 90vh;
-      margin: 5vh auto;
-    }
-
-    .close-btn {
-      position: fixed;
-      top: 20px; right: 30px;
-      color: white;
-      font-size: 40px;
-      cursor: pointer;
-    }
-
-    .nav {
-      position: fixed;
-      top: 50%; left: 0; right: 0;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 40px;
-    }
-
-    .nav button {
-      background: rgba(255,255,255,0.2);
-      border: none;
-      font-size: 40px;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .nav button:hover {
-      background: rgba(255,255,255,0.4);
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Radiance Field</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #fdbb2d;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .image-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .image-info {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .image-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #1a2a6c;
+        }
+        
+        .image-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .gif-container {
+            position: relative;
+        }
+        
+        .gif-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #fdbb2d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: #1a2a6c;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .image-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Neural Radiance Field!</h1>
-    <p class="subtitle">Complete visualization of all rendered results</p>
-  </header>
-
-  <div class="grid" id="imgGrid"></div>
-
-  <div id="modal" class="modal">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <div class="nav">
-      <button onclick="prevImg()">&#10094;</button>
-      <button onclick="nextImg()">&#10095;</button>
+    <div class="container">
+        <header>
+            <h1>Neural Radiance Field</h1>
+            <p>使用神经网络表示和渲染复杂3D场景的前沿技术</p>
+        </header>
+        
+        <div class="content">
+            <section class="section">
+                <h2 class="section-title">基础概念与原理</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p01.png" alt="NeRF基础原理">
+                        </div>
+                        <div class="image-info">
+                            <h3>NeRF基础原理</h3>
+                            <p>展示Neural Radiance Field的基本工作原理</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p02.png" alt="体积渲染方程">
+                        </div>
+                        <div class="image-info">
+                            <h3>体积渲染方程</h3>
+                            <p>离散体积渲染方程的数学表示</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2 class="section-title">训练过程与优化</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p11.gif" alt="训练过程1">
+                            <div class="gif-badge">GIF</div>
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程1</h3>
+                            <p>NeRF模型训练过程中的场景重建</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p12.gif" alt="训练过程2">
+                            <div class="gif-badge">GIF</div>
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程2</h3>
+                            <p>不同视角下的场景重建过程</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p13.gif" alt="训练过程3">
+                            <div class="gif-badge">GIF</div>
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程3</h3>
+                            <p>训练过程中细节逐渐清晰</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p14.gif" alt="训练过程4">
+                            <div class="gif-badge">GIF</div>
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程4</h3>
+                            <p>从模糊到清晰的训练演变</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p15.png" alt="训练过程5">
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程5</h3>
+                            <p>训练过程中的关键步骤</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p16.png" alt="训练过程6">
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程6</h3>
+                            <p>训练过程中的性能指标</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p17.png" alt="训练过程7">
+                        </div>
+                        <div class="image-info">
+                            <h3>训练过程7</h3>
+                            <p>训练完成后的结果对比</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2 class="section-title">射线与采样可视化</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p21.png" alt="射线可视化">
+                        </div>
+                        <div class="image-info">
+                            <h3>射线可视化</h3>
+                            <p>展示相机射线在3D空间中的分布</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p22.png" alt="采样点分布">
+                        </div>
+                        <div class="image-info">
+                            <h3>采样点分布</h3>
+                            <p>沿射线采样点的空间分布</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section">
+                <h2 class="section-title">实验结果与分析</h2>
+                <div class="image-grid">
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p31.png" alt="实验结果1">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果1</h3>
+                            <p>不同参数配置下的渲染质量对比</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p33.png" alt="实验结果2">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果2</h3>
+                            <p>PSNR指标随训练迭代的变化</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p34.png" alt="实验结果3">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果3</h3>
+                            <p>不同网络结构的性能比较</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p35.png" alt="实验结果4">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果4</h3>
+                            <p>训练与验证损失曲线</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p36.png" alt="实验结果5">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果5</h3>
+                            <p>不同视角下的渲染结果</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p38.png" alt="实验结果6">
+                        </div>
+                        <div class="image-info">
+                            <h3>实验结果6</h3>
+                            <p>最终渲染质量评估</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container gif-container">
+                            <img src="p39.gif" alt="球形渲染">
+                            <div class="gif-badge">GIF</div>
+                        </div>
+                        <div class="image-info">
+                            <h3>球形渲染</h3>
+                            <p>360度球形渲染结果展示</p>
+                        </div>
+                    </div>
+                    
+                    <div class="image-card">
+                        <div class="image-container">
+                            <img src="p40.png" alt="最终结果">
+                        </div>
+                        <div class="image-info">
+                            <h3>最终结果</h3>
+                            <p>训练完成后的高质量渲染</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>Neural Radiance Field 项目展示 &copy; 2023</p>
+        </footer>
     </div>
-    <img id="modalImg" />
-  </div>
 
-  <script>
-    const imageList = [
-      'p01.png','p02.png','p11.gif','p12.gif','p13.gif','p14.gif','p15.png','p16.png','p17.png',
-      'p21.png','p22.png','p31.png','p33.png','p34.png','p35.png','p36.png','p38.png','p39.gif','p40.png'
-    ];
-
-    const grid = document.getElementById('imgGrid');
-    imageList.forEach(src => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      const isGif = src.toLowerCase().endsWith('.gif');
-      const label = isGif ? '<div style="padding:6px 12px; font-size:14px; color:#e67e22; font-weight:bold; text-align:left;">GIF Animation</div>' : '';
-      card.innerHTML = `${label}<div class="img-box"><img src="${src}" autoplay loop></div>`;
-      card.onclick = () => openModal(src);
-      grid.appendChild(card);
-    });(card);
-    });
-
-    let currentIndex = 0;
-
-    function openModal(src) {
-      currentIndex = imageList.indexOf(src);
-      document.getElementById('modal').style.display = 'block';
-      document.getElementById('modalImg').src = src;
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-
-    function nextImg() {
-      currentIndex = (currentIndex + 1) % imageList.length;
-      document.getElementById('modalImg').src = imageList[currentIndex];
-    }
-
-    function prevImg() {
-      currentIndex = (currentIndex - 1 + imageList.length) % imageList.length;
-      document.getElementById('modalImg').src = imageList[currentIndex];
-    }
-
-    document.addEventListener('keydown', e => {
-      if (document.getElementById('modal').style.display === 'block') {
-        if (e.key === 'Escape') closeModal();
-        if (e.key === 'ArrowRight') nextImg();
-        if (e.key === 'ArrowLeft') prevImg();
-      }
-    });
-  </script>
+    <script>
+        // 确保所有GIF都能循环播放
+        document.addEventListener('DOMContentLoaded', function() {
+            const gifs = document.querySelectorAll('img[src$=".gif"]');
+            gifs.forEach(gif => {
+                // 移除可能存在的缓存参数，确保GIF重新加载
+                const src = gif.src;
+                if (src.indexOf('?') > -1) {
+                    gif.src = src.split('?')[0] + '?' + new Date().getTime();
+                } else {
+                    gif.src = src + '?' + new Date().getTime();
+                }
+                
+                // 设置循环播放
+                gif.setAttribute('loop', '');
+            });
+        });
+    </script>
 </body>
 </html>
