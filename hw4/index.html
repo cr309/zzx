@@ -51,6 +51,8 @@
     .img-box img {
       width: 100%;
       height: auto;
+      max-width: 900px;
+      max-height: 600px;
       object-fit: contain;
     }
 
@@ -128,9 +130,12 @@
     imageList.forEach(src => {
       const card = document.createElement('div');
       card.className = 'card';
-      card.innerHTML = `<div class="img-box"><img src="${src}"></div>`;
+      const isGif = src.toLowerCase().endsWith('.gif');
+      const label = isGif ? '<div style="padding:6px 12px; font-size:14px; color:#e67e22; font-weight:bold; text-align:left;">GIF Animation</div>' : '';
+      card.innerHTML = `${label}<div class="img-box"><img src="${src}" autoplay loop></div>`;
       card.onclick = () => openModal(src);
       grid.appendChild(card);
+    });(card);
     });
 
     let currentIndex = 0;
