@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>PDF Viewer</title>
+
+  <!-- 使用 CDN 引入 PDF.js（GitHub Pages 完全支持） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #f0f0f0;
+    }
+    #pdf-viewer {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    canvas {
+      display: block;
+      margin: 20px auto;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      background: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="pdf-viewer"></div>
+
+<script>
+  // ★★★ 修改为你的 PDF 文件名 ★★★
+  const url = "myfile.pdf";  
+
+  const viewer = document.getElementById("pdf-viewer");
+
+  // 载入 PDF
+  pdfjsLib.getDocument(url).promise.then(pdf => {
+    console.log(`PDF loaded (${pdf.numPages} pages)`);
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      pdf.getPage(pageNum).then(page => {
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        viewer.appendChild(canvas);
+
+        page.render({
+          canvasContext: context,
+          viewport: viewport,
+        });
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
